@@ -1,0 +1,190 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+
+\usepackage{sectsty} % Allows customizing section commands
+\allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+
+\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge SICP - Building Abstractions with Procedures \\ % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+
+\author{Chuy Martinez} % Your name
+
+\date{\normalsize\today} % Today's date or a custom date
+\begin{document}
+
+\maketitle
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+\section{Excercise 1.13}
+
+Prove that $Fib(n)$ is the closest integer to $\phi^5 / \sqrt5$, where $\phi = (1 + \sqrt5) / 2$. Let $\psi = (1 - \sqrt5) / 2$. Use induction and the definition of the Fibonacci numbers to prove that $Fib(n) = (\phi^n - \psi^n)/\sqrt 5$.\\
+
+First, we identify that $\phi$ is the \emph{golden ratio} constant, which exhibit the following 2 properties:\\
+\begin{align}
+  \begin{split}
+    \phi^2=\phi+1\\
+    \phi=1 + \frac{1}{\phi}
+  \end{split}
+\end{align}
+
+When we rearrange the above like so: $\phi^2-\phi-1=0$ and solve the equation, we found two possible solutions:\\
+
+\begin{align}
+  \begin{split}
+    \phi=\frac{1+\sqrt5}{2}\\
+    \phi=\frac{1-\sqrt5}{2}
+  \end{split}
+\end{align}
+
+Thus, $\phi$ and $\psi$ being solutions of the equation, they share the same properties listed above.\\
+
+Now, we know that the first three values of the Fibonacci sequence are: ${1,1,2}$. Let us find out if $Fib(n)=\phi^n/\sqrt5$:\\
+
+For $Fib(1)$
+\begin{align}
+  \begin{split}
+    Fib(1) &=\frac{\phi^1 - \psi^1}{\sqrt5}\\
+    &= \frac{\frac{1+\sqrt5}{2}-\frac{1-\sqrt5}{2}}{\sqrt5}\\
+    &= \frac{\frac{2+2\sqrt5-2+2\sqrt5}{4}}{\sqrt5}\\
+    &= \frac{\frac{4\sqrt5}{4}}{\sqrt5}\\
+    &= \frac{\sqrt5}{\sqrt5}\\
+    &= 1\\
+  \end{split}
+\end{align}
+
+For $Fib(2)$
+\begin{align}
+  \begin{split}
+    Fib(2) &=\frac{\phi^2 - \psi^2}{\sqrt5}\\
+    &= \frac{(\phi+1) - (\psi + 1)}{\sqrt5}\\
+    &= \frac{\frac{1+\sqrt5}{2}-\frac{1-\sqrt5}{2}}{\sqrt5}\\
+    &= \frac{\frac{2+2\sqrt5-2+2\sqrt5}{4}}{\sqrt5}\\
+    &= \frac{\frac{4\sqrt5}{4}}{\sqrt5}\\
+    &= \frac{\sqrt5}{\sqrt5}\\
+    &= 1\\
+  \end{split}
+\end{align}
+
+For $Fib(3)$
+\begin{align}
+  \begin{split}
+    Fib(3) &=\frac{\phi^3 - \psi^3}{\sqrt5}\\
+    &= \frac{((\phi + 1) \times \phi) - ((\psi + 1) \times \psi)}{\sqrt5}\\
+    &= \frac{(\phi^2 + \phi) - (\psi^2 + \psi)}{\sqrt5}\\
+    &= \frac{(\phi + 1 + \phi) - (\psi + 1 + \psi)}{\sqrt5}\\
+    &= \frac{2\phi - 2\psi}{\sqrt5}\\
+    &= \frac{2\frac{1+\sqrt5}{2} - 2\frac{1-\sqrt5}{2}}{\sqrt5}\\
+    &= \frac{2\sqrt5}{\sqrt5}\\
+    &= \frac{10}{5}\\
+    &= 2\\
+  \end{split}
+\end{align}
+
+We found out that it holds for the first three $n$ values, let us prove that it holds for any $n$ value. First, consider that $Fib(n) = Fib(n-1) + Fib(n-2)$. Then:\\
+
+\begin{align}
+  \begin{split}
+    Fib(n) &=\frac{\phi^{n-1} - \psi^{n-1}}{\sqrt5} + \frac{\phi^{n-2} - \psi^{n-2}}{\sqrt5}\\
+    &=\frac{\phi^n (\phi^{-1} + \phi^{-2}) - \psi^n (\psi^{-1} + \psi^{-2})}{\sqrt5} \\
+    &=\frac{\phi^n (\frac{1}{\phi} + \frac{1}{\phi^2}) - \psi^n (\frac{1}{\psi} + \frac{1}{\psi^2})}{\sqrt5} \\
+    &=\frac{\phi^n (\frac{\phi+1}{\phi^2}) - \psi^n (\frac{\psi+1}{\psi^2})}{\sqrt5} \\
+    &=\frac{\phi^n (\frac{\phi+1}{\phi+1}) - \psi^n (\frac{\psi+1}{\psi+1})}{\sqrt5} \\
+    &=\frac{\phi^n (1) - \psi^n (1)}{\sqrt5} \\
+    &=\frac{\phi^n - \psi^n}{\sqrt5} \\
+  \end{split}
+\end{align}\\
+
+Now, we want to prove that $Fib(n) = [\phi^n/\sqrt5]$, this means, we need to prove that $\frac{\psi^n}{\sqrt5} < 1/2$. Any value greater than $1/2$ will affect the nearest integer result of the previous assumption:\\
+
+We have that:\\
+
+\begin{align}
+  \begin{split}
+    \psi = \frac{1 - \sqrt5}{2} = -0.6180339...
+  \end{split}
+\end{align}\\
+
+Then, for $n \geq 1$:\\
+
+\begin{align}
+  \begin{split}
+    \psi &< 0\\
+    \psi^n &\leq \psi^2\\
+    \psi^n &\leq 0.381966\\
+  \end{split}
+\end{align}\\
+
+Now, we check if $0.381966/\sqrt5 < 1/2$:\\
+
+\begin{align}
+  \begin{split}
+    \frac{0.381966}{\sqrt5} &< 1/2\\
+    \frac{0.381966}{2.236} &< 0.5\\
+    0.17082 &< 0.5\\
+  \end{split}
+\end{align}\\
+
+Then we conclude that:\\
+
+\begin{align}
+  \begin{split}
+    Fib(n) = \bigg[\frac{\phi^n}{\sqrt5}\bigg]
+  \end{split}
+\end{align}\\
+
+\end{document}
