@@ -1,0 +1,10 @@
+(define (expt b n)
+  (define (expt-iter b n a)
+    (cond ((= n 1) (* b a))
+          ((odd? n) (expt-iter b (- n 1) (* b a)))
+          (else (expt-iter (square b) (/ n 2) a))))
+  (define (odd? x)
+    (= 1 (bitwise-and x 1)))
+  (define (square x) (* x x))
+  (expt-iter b n 1))
+          
