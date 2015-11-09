@@ -12,7 +12,7 @@
             ((even? x) (* 2 (yk x)))
             (else (* 4 (yk x)))))
 
-    (* (/ h 3) (sum term 0 next n)))
+    (* (/ h 3) (sum-iter term 0 next n)))
   (do (/ (- b a) n)))
 
 (define (cube x) (* x x x))
@@ -22,3 +22,10 @@
       0
       (+ (term a)
          (sum term (next a) next b))))
+
+(define (sum-iter term a next b)
+  (define (iter a result)
+    (if (> a b)
+        result
+        (iter (next a) (+ (term a) result))))
+  (iter a 0))
