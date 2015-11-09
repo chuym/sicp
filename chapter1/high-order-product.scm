@@ -10,6 +10,11 @@
       1.0
       (* (term a) (product-rec term (next a) next b))))
 
+(define (factorial x)
+  (define (term x) x)
+  (define (next x) (+ x 1))
+  (product term 2 next x))
+
 (define (pi-approx n)
   (define (term n)
     (cond ((= n 1) (/ 2 3))
