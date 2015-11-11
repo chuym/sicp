@@ -1,0 +1,25 @@
+(define (iterative-improve good-enough? improve)
+  (define (iter x)
+    (display x)
+    (newline)
+    (if (good-enough? x)
+        x
+        (iter (improve x))))
+  (lambda (x) (iter x)))
+
+(define (sqrt x)
+  ((iterative-improve (lambda (guess)  (< (abs (- (square guess) x)) 0.001))
+                      (lambda (guess) (/ (+ guess (/ x guess)) 2)))
+   1.0))
+
+(define (fixed-point f first-guess)
+  (define tolerance 0.00001)
+  ((iterative-improve (lambda (x)
+                     (< (abs (- x (f x))) tolerance))
+                   (lambda (x)
+                     (f x)))
+   first-guess))
+
+(define (golden-ratio)
+  (fixed-point (lambda (x) (+ 1 (/ 1 x)))
+               1.0))
