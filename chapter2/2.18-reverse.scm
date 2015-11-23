@@ -1,6 +1,6 @@
 (define (reverse items)
-  (define (iter n reversed)
-    (if (< n 0)
-        reversed
-        (iter (- n 1) (append reversed (cons (list-ref items n) '())))))
-  (iter (- (length items) 1) '()))
+  (define (iter things result)
+    (if (null? things)
+        result
+        (iter (cdr things) (cons (car things) result))))
+  (iter items '()))
