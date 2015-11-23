@@ -1,0 +1,44 @@
+<html>
+  <head>
+    <title>SICP - Excecise 2.13</title>
+    <script type="text/javascript"
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      </script>
+  </head>
+
+  <body>
+    <h1>Excecise 2.13 - Small percent tolerance cases</h1>
+    <p>
+      Show that under the assumption of small percentage tolerances there is a simple formula for the approximate percentage tolerance of the product of two intervals in terms of the tolerances of the factors. You may simplify the problem by assuming that all numbers are positive.
+    </p>
+    <p>
+      An interval \(I\) is defined in terms of a center \(I_c\) and a given percent tolerance \(I_p\) as follows:
+      $$
+      I = \langle I_c \cdot (1 - (I_p / 100)), \, I_c \cdot (1 + (I_p / 100)) \rangle
+      $$
+      Where \(I_1\) will be the lower bound of the interval \(I\) and \(I_2\) is the upper bound.<br>
+
+      The multiplication of two intervals \(a\) and \(b\) whose boundaries are all positive, is defined as:
+      $$
+      I = \langle a_1b_1, \, a_2b_2 \rangle
+      $$
+      Now, if we substitute the multiplication terms with the full definition of an interval, we get that:
+      $$
+      I = \langle a_c \cdot (1 - (a_p / 100)) \cdot b_c \cdot (1 - (b_p / 100)), \, a_c \cdot (1 + (a_p / 100)) \cdot b_c \cdot (1 - (b_p / 100)) \rangle
+      $$
+      Simplifying the equation, we have:
+      $$
+      \begin{align}
+      I &= \langle a_c \cdot (1 - (a_p / 100)) \cdot b_c \cdot (1 - (b_p / 100)), \, a_c \cdot (1 + (a_p / 100)) \cdot b_c \cdot (1 - (b_p / 100)) \rangle \\
+      &= \langle a_cb_c \cdot (1 - (a_p / 100)) \cdot (1 - (b_p / 100)), \, a_cb_c \cdot (1 + (a_p / 100)) \cdot (1 + (b_p / 100)) \rangle \\
+      &= \left\langle a_cb_c \cdot (1 - \frac{a_p + b_p}{100} + \frac{a_pb_p}{10000}), \, a_cb_c \cdot (1 + \frac{a_p + b_p}{100} + \frac{a_pb_p}{10000} \right\rangle \\
+      \end{align}
+      $$
+      The term \(\frac{a_pb_p}{10000}\) is not significant for low tolerances \(a_p\) and \(b_p\), and we can get a good enough approximation if we discard them, getting:
+      $$
+      I = \left\langle a_cb_c \cdot (1 - \frac{a_p + b_p}{100}), \, a_cb_c \cdot (1 + \frac{a_p + b_p}{100} \right\rangle
+      $$
+      We can see then, that the approximate tolerance value of the resulting interval is the sum of \(a\) and \(b\) percentages.
+    </p>
+  </body>
+</html>
