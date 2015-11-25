@@ -43,13 +43,3 @@
           (torque (right-branch mobile)))
        (and (submobiles-balanced? (left-branch mobile))
             (submobiles-balanced? (right-branch mobile)))))
-
-(define branch1 (make-branch 50 120))
-(define branch2 (make-branch 50 150))
-(define mobile-small (make-mobile branch1 branch2))
-(define mobile-small-1 (make-mobile branch2 branch1))
-(define branch-with-mobile (make-branch 20 mobile-small))
-(define branch-with-mobile1 (make-branch 20 mobile-small-1))
-(define bigmobile (make-mobile branch-with-mobile branch-with-mobile1))
-
-(define balanced-mobile (make-mobile branch1 branch1))
