@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <title>SICP - Exercise 2.43</title>
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$', '$'] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script type="text/javascript"
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      </script>
+  </head>
+  <body>
+    <h1>Exercise 2.43</h1>
+    <p>Louis Reasoner is having a terrible time doing exercise 2.42. His <code>queens</code> procedure seems to work, but it runs extremely slowly. (Lous never does manage to wait long enough for it to solve even the 6 $\times$ 6 case.) When Louis asks Eva Lu Ator for help, she points out that he has interchanged the order of the nested mapping in the <code>flatmap</code>, writing it as: <br>
+      <p>
+        <pre>
+          (flatmap
+           (lambda (new-row)
+             (map (lambda (rest-of-queens)
+                    (adjoin-position new-row k rest-of-queens))
+                  (queen-cols (- k 1))))
+           (enumerate-interval 1 board-size))
+        </pre>
+      </p>
+    <p>Explain why this interchange makes the program run slowly. Estimate how long it will take Louis's program to solve the eight-queens puzzle, assuming that the program in exercise 2.42 solves the puzzle in time $T$.
+    </p>
+    <br><br>
+    <p>
+      Louis' implementation is computing <code>queen-cols</code> <code>board-size</code> number of times, then if the regular implementation takes $T$ time to solve it, Louis' implementation will take $T^k$ time, where $k$ is the size of the board.
+    </p>
+  </body>
+</html>
