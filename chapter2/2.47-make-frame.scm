@@ -16,8 +16,8 @@
 (define (origin-frame-alt frame)
   (car frame))
 
-(define (edge1-frame frame)
+(define (edge1-frame-alt frame)
   (cadr frame))
 
-(define (edge2-frame frame)
+(define (edge2-frame-alt frame)
   (cdr (cdr frame)))
