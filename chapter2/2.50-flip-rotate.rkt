@@ -1,5 +1,5 @@
 (require (planet "sicp.ss" ("soegaard" "sicp.plt" 2 1)))
-(load "chapter2/2.46-vectors.scm")
+(load "2.46-vectors.scm")
 
 (define (transform-painter painter origin corner1 corner2)
   (lambda (frame)
