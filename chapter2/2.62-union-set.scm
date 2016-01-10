@@ -1,0 +1,15 @@
+(define (element-of-set? x set)
+  (cond ((null? set) #f)
+        ((= x (car set) #t))
+        ((< x (car set) #f))
+        (else (element-of-set? x (cdr set)))))
+
+(define (union-set a b)
+  (cond ((null? a) b)
+        ((null? b) a)
+        (else (let ((left (car a))
+                    (right (car b)))
+                (cond ((= left right) (cons left (union-set (cdr a) (cdr b))))
+                      ((> right left) (cons left (union-set (cdr a) b)))
+                      (else (cons right (union-set a (cdr b)))))))))
+                       
