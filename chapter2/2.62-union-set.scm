@@ -12,4 +12,3 @@
                 (cond ((= left right) (cons left (union-set (cdr a) (cdr b))))
                       ((> right left) (cons left (union-set (cdr a) b)))
                       (else (cons right (union-set a (cdr b)))))))))
-                       
