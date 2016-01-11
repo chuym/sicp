@@ -19,10 +19,9 @@
   (if (and (not (leaf? tree)) (element-of-set? symbol (symbols tree)))
       (encode-leaf tree)
       (error "symbol not found in tree -- ENCODE-SYMBOL" symbol)))
-        
+
 (define (encode message tree)
   (if (null? message)
       '()
       (append (encode-symbol (car message) tree)
               (encode (cdr message) tree))))
-              
