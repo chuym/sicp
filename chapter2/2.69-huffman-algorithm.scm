@@ -15,12 +15,15 @@
                            (cons (car leaves) remainder)))))
 
 (define (successive-merge leaves)
-  (if (< (length leaves) 2)
-      leaves
-      (let ((pair (lowest-pair leaves '() '())))
-        (successive-merge (adjoin-set (make-code-tree (car (car pair))
-                                                      (cadr (car pair)))
-                                      (cadr pair))))))
+  (cond ((null? leaves) '())
+        ((< (length leaves) 2) (car leaves))
+        (else (let ((pair (lowest-pair leaves '() '())))
+                (display pair)
+                (newline)
+                (newline)
+                (successive-merge (adjoin-set (make-code-tree (car (car pair))
+                                                              (cadr (car pair)))
+                                              (cadr pair)))))))
 
 (define (adjoin-set x set)
   (cond ((null? set) (list x))
