@@ -1,0 +1,8 @@
+The encode procedure can be broken down as follows:
+
+* It runs encode-symbol method once for each symbol in the message. That runs in O(n) time.
+* encode-symbol calls element-of-set? twice, for both, the left and the right branches of the tree. Each of them runs in
+* O(n/2) time, ending up in O(n) time.
+* In total, the encode procedure runs in O(n^2)
+* In practice, the running time might be lower than that, given that the most frequent symbols appear more often and it is higher
+* up in the tree. Giving a tight boundary is difficult, but we can be sure that, for any symbol, the higher bound is O(n^2).
