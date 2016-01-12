@@ -1,0 +1,40 @@
+(load "2.67-sample-message.scm")
+
+(define (lowest-pair leaves pair remainder)
+  (cond ((null? leaves) (list pair remainder))
+        ((> 2 (length pair)) (lowest-pair (cdr leaves)
+                                          (cons (car leaves) pair)
+                                          remainder))
+        ((> (weight (car leaves)) (weight (car pair))) (list pair (append remainder leaves)))
+        ((> (weight (car pair)) (weight (car leaves)))
+         (lowest-pair (cdr leaves)
+                      (list (car leaves) (car pair))
+                      (cons (cadr pair) remainder)))
+        (else (lowest-pair (cdr leaves)
+                           pair
+                           (cons (car leaves) remainder)))))
+
+(define (successive-merge leaves)
+  (if (< (length leaves) 2)
+      leaves
+      (let ((pair (lowest-pair leaves '() '())))
+        (successive-merge (adjoin-set (make-code-tree (car (car pair))
+                                                      (cadr (car pair)))
+                                      (cadr pair))))))
+
+(define (adjoin-set x set)
+  (cond ((null? set) (list x))
+        ((< (weight x) (weight (car set))) (cons x set))
+        (else (cons (car set)
+                    (adjoin-set x (cdr set))))))
+
+(define (make-leaf-set pairs)
+  (if (null? pairs)
+      '()
+      (let ((pair (car pairs)))
+        (adjoin-set (make-leaf (car pair)
+                               (cadr pair))
+                    (make-leaf-set (cdr pairs))))))
+
+(define (generate-huffman-tree pairs)
+  (successive-merge (make-leaf-set pairs)))
