@@ -1,0 +1,20 @@
+We have seen three strategies for implementing generic operations on large and complex systems:
+
+- explicit dispatch - where the functions must be aware of the different implementations of the data structure, using tags.
+- data-directed - where we keep a table containing the generic operations and how they are implemented depending the data type
+- message-passing - where we implement a dispatch procedure that receives the operation to be performed and runs the appropiate
+- procedure for that data structure.
+
+- Explicit dispatch is not scalable when there are multitude of data types. It makes sense to use it for the simplicity of
+implementation and when we can guarantee that the representation won't grow. Adding new data types under this strategy will
+require to change all methods and implement additional checks for the data type.
+
+- data-directed is more complex to implement as it has to maintain a table with the operations for each data structure, however
+adding new types is very simple, all it needs is to register the new type to the operations table. The challenge is that all
+types must keep the same interface - they must all respond to the same procedures, otherwise the software that makes use of these
+data structures may become fragile. Also, new types need to be aware of name collision.
+
+- message-passing - this is the simplest to implement in terms of keeping the complexity contained within the data structure.
+instead of maintaining a table with all operations available, the data structure is in charge of exposing that functionality
+without any middle man. This has similar advantages like data-directed as in adding a new type is just a matter of defining it
+however, as we have seen so far, it's limited to procedures that take a single parameter.
