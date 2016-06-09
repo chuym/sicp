@@ -1,0 +1,12 @@
+When Louis Reasoner constructs his complex number, he will end up having something like:
+('(complex) . (rectangular) . (3 5)
+
+So when the method (magnitude) is called through apply-generic, it retrieves the tag:
+'(complex)
+
+And attempts to look for a '(magnitude) procedure defined for the tag '(complex), since it
+doesn't exist, the procedure call fails.
+
+apply-generic is called twice, the first time it tries to look for a magnitude method udner the
+'(complex) tag, since we just proxy that call to the generic magnitude method, it does another
+apply-generic call, but this time calling looking for the '(rectangular) tag (as per the example above)
