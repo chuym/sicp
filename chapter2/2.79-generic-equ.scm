@@ -141,7 +141,17 @@
   (put 'equ? '(complex complex) equ?)
   (put 'make-from-mag-ang 'complex
        (lambda (r a) (tag (make-from-mag-ang r a))))
+
+  (put 'real-part '(complex) real-part)
+  (put 'imag-part '(complex) imag-part)
+  (put 'magnitude '(complex) magnitude)
+  (put 'angle '(complex) angle)
   'done)
+
+(define (real-part z) (apply-generic 'real-part z))
+(define (imag-part z) (apply-generic 'imag-part z))
+(define (magnitude z) (apply-generic 'magnitude z))
+(define (angle z) (apply-generic 'angle z))
 
 (define (make-complex-from-real-imag x y)
   ((get 'make-from-real-imag 'complex) x y))
@@ -157,6 +167,10 @@
 (define (install-scheme-number-package)
   (define (tag x)
     (attach-tag 'scheme-number x))
+
+  (define (scheme-number->complex n)
+    (make-complex-from-real-imag (contents n) 0))
+
   (put 'add '(scheme-number scheme-number)
        (lambda (x y) (tag (+ x y))))
   (put 'sub '(scheme-number scheme-number)
@@ -166,6 +180,8 @@
   (put 'div '(scheme-number scheme-number)
        (lambda (x y) (tag (/ x y))))
   (put 'equ? '(scheme-number scheme-number) equal?)
+  (put 'exp '(scheme-number scheme-number)
+       (lambda (x y) (tag (expt x y))))
   (put 'make 'scheme-number
        (lambda (x) (tag x)))
   'done)
