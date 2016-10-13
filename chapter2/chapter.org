@@ -78,6 +78,7 @@ that raises objects of that type one level in the tower. Show how to install a g
 operation that will work for each type (except complex).
 
 #+BEGIN_SRC scheme
+(load "/home/xdc/study/sicp/chapter2/ch2support.scm")
   (define (find-tuple-with-key tuple-list key)
     (cond ((null? tuple-list) #f)
           ((eq? (caar tuple-list) key) (car tuple-list))
@@ -116,27 +117,55 @@ operation that will work for each type (except complex).
   (define get-ancestor (type-hierarchy 'lookup-proc))
   (define put-ancestor (type-hierarchy 'insert-proc!))
 
-  (define (raise value type target-type)
-    (display '(value type target-type))
-    (newline)
-    (if (eq? type target-type)
-        value
-        (let ((ancestor (get-ancestor type)))
-          (if ancestor
-              (raise
-               ((caddr ancestor) value)
-               (cadr ancestor)
-               target-type)
-              (error "Type has no ancestors" type)))))
+  (define (raise value target-type)
+    (let ((type (type-tag value))
+          (content (contents value)))
+      (if (eq? type target-type)
+          value
+          (let ((ancestor (get-ancestor type)))
+            (if ancestor
+                (raise
+                 ((caddr ancestor) value)
+                 target-type)
+                (#f))))))
 
   ;; Just some silly convertion procedures, just to prove it works
-  (put-ancestor 'integer 'rational (lambda (v) v))
-  (put-ancestor 'rational 'real (lambda (v) v))
-  (put-ancestor 'real 'complex (lambda (v) (* v 2)))
+  (put-ancestor 'integer 'rational (lambda (v) (cons 'rational (contents v))))
+  (put-ancestor 'rational 'real (lambda (v) (cons 'real (contents v))))
+  (put-ancestor 'real 'complex (lambda (v) (cons 'complex (* 2 (contents v)))))
 
-  (raise 5 'integer 'complex) ;; expected result is 10
+  (define sample-value (cons 'integer 5))
+
+  (raise sample-value 'complex) ;; expected result is 10
 
 #+END_SRC
 
 #+RESULTS:
-: 10
+
+* Exercise 2.84
+  Using the raise operation of exercise 2.83, modify the ~apply-generic~ procedure so that it
+  coerces its arguments to have the same type by the method of successive raising, as discussed in
+  this section. You will need to devise a way to test which of the two types is higher in the tower.
+  Do this in a manner that is "compatible" with the rest of the system and will not lead to problems
+  in adding new levels to the tower.
+#+BEGIN_SRC scheme
+  (define (raising-possible? type-tags)
+    
+  (define (apply-generic op . args)
+    (let ((type-tags (map type-tag args)))
+      (let ((proc (get op type-tags)))
+        (if proc
+            (apply proc (map contents args))
+            ;; raising-possible? should check for each type in the array for the highest type.
+            ;; just walk the tower and transform to pairs, the second value should be the position
+            ;; in the tower.
+            ;; Ideally it should be a hash, but no idea how to do that on scheme.
+            (if (raising-possible? type-tags)
+                (let ((common-ancestor (find-common-ancestor type-tags)))
+                  (if common-ancestor
+                      (apply inner (cons op (map (lambda (value)
+                                                   (raise value common-ancestor))
+                                                 type-tags)))
+                      (error "No method for these types" (list op type-tags))))
+                (error "No method for these types" (list op type-tags)))))))
+#+END_SRC
