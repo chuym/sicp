@@ -68,3 +68,37 @@ counter. For instance, we could make a monitored version of the sqrt procedure:
 : 2
 : 25
 : 1
+* Exercise 3.3
+Modify the make-account procedure so that it creates password-protected accounts.
+
+#+BEGIN_SRC scheme :results output
+    (define (make-account balance password)
+
+      (define (deposit amount)
+        (cond ((< amount 0) (error "Cannot deposit a negative value"))
+              (else
+               (set! balance (+ balance amount))
+               balance)))
+
+      (define (withdraw amount)
+        (cond ((< amount 0) (error "Cannot withdraw a negative value"))
+              ((< balance amount) (error "Insufficient funds"))
+              (else
+               (set! balance (- balance amount))
+               balance)))
+      (lambda (provided-password method)
+        (cond ((not (eq? password provided-password)) (error "Incorrect password"))
+              ((eq? method 'withdraw) withdraw)
+              ((eq? method 'deposit) deposit)
+              (else "Bad method"))))
+
+    (define acc (make-account 100 'secret-password))
+
+    (display ((acc 'secret-password 'withdraw) 40))
+    (newline)
+    (display ((acc 'secret-password 'deposit) 15))
+#+END_SRC
+
+#+RESULTS:
+: 60
+: 75
