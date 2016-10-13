@@ -102,3 +102,77 @@ Modify the make-account procedure so that it creates password-protected accounts
 #+RESULTS:
 : 60
 : 75
+* Exercise 3.4
+
+Modify the make-account procedure of exercise 3.3 by adding another local state variable so that, if
+an account is accessed more than seven consecutive times with an incorrect password, it invokes the
+procedure call-the-cops.
+
+#+BEGIN_SRC scheme :results output
+
+  (define (make-account balance password)
+    (define bad-password-given 0)
+
+    (define (deposit amount)
+      (cond ((< amount 0) (error "Cannot deposit a negative value"))
+            (else
+             (set! balance (+ balance amount))
+             balance)))
+
+    (define (withdraw amount)
+      (cond ((< amount 0) (error "Cannot withdraw a negative value"))
+            ((< balance amount) (error "Insufficient funds"))
+            (else
+             (set! balance (- balance amount))
+             balance)))
+
+    (define (incorrect-password)
+      (cond ((>= bad-password-given 7) "Calling the cops!")
+            (else
+             (set! bad-password-given (+ bad-password-given 1))
+             "Bad password given. Try again")))
+
+    (lambda (provided-password method)
+      (cond ((not (eq? password provided-password)) (lambda (v) (incorrect-password)))
+            ((eq? method 'withdraw) withdraw)
+            ((eq? method 'deposit) deposit)
+            (else "Bad method"))))
+
+  (define acc (make-account 100 'secret-password))
+
+  (display ((acc 'secret-password 'withdraw) 40))
+  (newline)
+  (display ((acc 'secret-password 'deposit) 15))
+  (newline)
+  (display ((acc 'bad-password 'withdraw) 50))
+  (newline)
+  (display ((acc 'bad-password 'withdraw) 50))
+  (newline)
+  (display ((acc 'bad-password 'withdraw) 50))
+  (newline)
+  (display ((acc 'bad-password 'withdraw) 50))
+  (newline)
+  (display ((acc 'bad-password 'withdraw) 50))
+  (newline)
+  (display ((acc 'bad-password 'withdraw) 50))
+  (newline)
+  (display ((acc 'bad-password 'withdraw) 50))
+  (newline)
+  (display ((acc 'bad-password 'withdraw) 50))
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+60
+75
+Bad password given. Try again
+Bad password given. Try again
+Bad password given. Try again
+Bad password given. Try again
+Bad password given. Try again
+Bad password given. Try again
+Bad password given. Try again
+Calling the cops!
+#+end_example
+
+#+RESULTS:
