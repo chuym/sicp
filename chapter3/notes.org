@@ -338,3 +338,29 @@ arguments are evaluated from right to left.
 #+RESULTS:
 : "0\n0"
 
+* Exercise 3.9
+Show the environment structures created by evaluating (factorial 6) using each version of the
+factorial procedure.14.
+
+Not very practical to draw a diagram in characters, so I'll try to describe how it would look.
+
+With the recursive version, there will be N executions of the `factorial` function. With each call
+it will create a new frame, which is child of the previous one. The initial call is a child of the
+global frame.
+
+With the iterative version, `factorial` will create N frames for each call of `fact-iter`, where
+each frame would be a sibling of each other.
+* Exercise 3.10
+Show that the two versions of make-withdraw create objects with the same behavior. How do the
+environment structures differ for the two versions?
+
+Not very practical to draw a diagram in characters, so I'll try to describe how it would look.
+
+The original `make-withdraw` will create a frame where the `balance` property will hold some value
+it will return a procedure whose frame is a child of the one created by `make-withdraw`. When the
+procedure returned by `make-withdraw` performs an operation on `balance`, it will retrieve the value
+from `make-withdraw`'s frame, that is, its parent.
+
+If using `let`, `make-withdraw` will define a new frame, which will isolate the `balance` property
+ on its own frame. This isolation will return a lambda which has access to the frame created by
+`let`, that is, there will be an additional frame in the hierarchy.
