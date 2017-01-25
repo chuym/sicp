@@ -364,3 +364,18 @@ from `make-withdraw`'s frame, that is, its parent.
 If using `let`, `make-withdraw` will define a new frame, which will isolate the `balance` property
  on its own frame. This isolation will return a lambda which has access to the frame created by
 `let`, that is, there will be an additional frame in the hierarchy.
+* Exercise 3.11
+Where is the local state for acc kept? Suppose we define another account
+
+(define acc2 (make-account 100))
+
+How are the local states for the two accounts kept distinct? Which parts of the environment
+structure are shared between acc and acc2?
+
+When `make-account` is called, a frame is bound to some free variable (acc2 in the example). This
+frame will contain the definitions of `withdraw`, `deposit` and `dispatch` procedures. These 
+procedures act upon a `balance` property, which is set when `make-account` is called. This value is
+isolated between each call of `make-account`, this means that, `acc` and `acc2` are completely 
+independent, since they keep their `balance` on their own frames.
+
+The only parts of the environment shared by `acc` and `acc2` is the global environment.
