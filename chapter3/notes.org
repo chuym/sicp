@@ -439,4 +439,33 @@ infinite loop. Exercise 3.13 constructed such lists.
 
 #+RESULTS:
 : "#t"
+* Exercise 3.19
+Redo exercise 3.18 using an algorithm that takes only a constant amount of space. (This requires a
+very clever idea.)
+
+#+BEGIN_SRC scheme :results output
+  (define (has-cycle? xs)
+    (define (iter tortoise hare)
+      (if (or (null? tortoise) (null? hare))
+          #f
+          (let* ((tortoise-value (car tortoise))
+                 (hare-value (car hare)))
+            (cond ((eq? tortoise-value hare-value) #t)
+                  ((null? (cdr hare)) #f)
+                  (else
+                   (iter (cdr tortoise)
+                         (cddr hare)))))))
+    (iter xs (cdr xs)))
+
+  (define (make-cycle x)
+    (set-cdr! (last-pair x) x)
+    x)
+
+  (define a (list 1 2 3))
+  (define b (list 4 5 6))
+  (display (has-cycle? (make-cycle a)))
+#+END_SRC
+
+#+RESULTS:
+: "#t"
 
