@@ -379,3 +379,64 @@ isolated between each call of `make-account`, this means that, `acc` and `acc2` 
 independent, since they keep their `balance` on their own frames.
 
 The only parts of the environment shared by `acc` and `acc2` is the global environment.
+* Exercise 3.17
+Devise a correct version of the count-pairs procedure of exercise 3.16 that returns the number of
+distinct pairs in any structure. (Hint: Traverse the structure, maintaining an auxiliary data
+structure that is used to keep track of which pairs have already been counted.)
+
+#+BEGIN_SRC scheme :results output
+  (define (count-pairs xs)
+    (define counted '())
+
+    (define (count pair)
+      (cond ((not (pair? pair)) 0)
+            ((member (car pair) counted) 0)
+            (else
+             (set! counted (append counted (list (car pair))))
+             (+ (count (car pair))
+                (count (cdr pair))
+                1))))
+    (count xs))
+
+  (define a (list 1 2 3))
+  (define b (list 4 5 6))
+  (display (count-pairs (append a b (list b))))
+#+END_SRC
+
+#+RESULTS:
+: "7"
+
+The result above corresponds to 6 for each different digit, plus 1 for the list created with
+(list b).
+* Exercise 3.18
+Write a procedure that examines a list and determines whether it contains a cycle, that is,
+whether a program that tried to find the end of the list by taking successive cdrs would go into an
+infinite loop. Exercise 3.13 constructed such lists.
+
+#+BEGIN_SRC scheme :results output
+  (define (has-cycle? xs)
+    (define checked '())
+
+    (define (iter pair)
+      (cond ((not (pair? pair)) #f)
+            ((member pair checked) #t)
+            (else
+             (set! checked (append checked (list pair)))
+             (if (pair? (car pair))
+                 (and (iter (car pair))
+                      (iter (cdr pair)))
+                 (iter (cdr pair))))))
+    (iter xs))
+
+  (define (make-cycle x)
+    (set-cdr! (last-pair x) x)
+    x)
+
+  (define a (list 1 2 3))
+  (define b (list 4 5 6))
+  (display (has-cycle? (make-cycle a)))
+#+END_SRC
+
+#+RESULTS:
+: "#t"
+
