@@ -559,3 +559,80 @@ To print the items in the queue, the following procedure should work as expected
   (define (print-queue q)
     (car q))
 #+END_SRC
+
+* Exercise 3.22
+Instead of representing a queue as a pair of pointers, we can build a queue as 
+a procedure with local state. The local state will consist of pointers to the 
+beginning and the end of an ordinary list. Thus, the make-queue procedure will 
+have the form
+
+(define (make-queue)
+  (let ((front-ptr ...)
+        (rear-ptr ...))
+    <definitions of internal procedures>
+    (define (dispatch m) ...)
+    dispatch))
+
+Complete the definition of make-queue and provide implementations of the queue 
+operations using this representation.
+
+#+BEGIN_SRC scheme :results output
+  (define (make-queue)
+    (let ((front-ptr '())
+          (rear-ptr '()))
+      (define (set-front-ptr! v)
+        (set! front-ptr v))
+      (define (set-rear-ptr! v)
+        (set! rear-ptr v))
+      (define (empty-queue?)
+        (null? front-ptr))
+      (define (front-queue)
+        (if (empty-queue?)
+            (error "FRONT called with an empty queue")
+            (car front-ptr)))
+      (define (insert-queue! item)
+        (let ((new-pair (cons item '())))
+          (cond ((empty-queue?)
+                 (set-front-ptr! new-pair)
+                 (set-rear-ptr! new-pair)
+                 (cons front-ptr rear-ptr))
+                (else
+                 (set-cdr! rear-ptr new-pair)
+                 (set-rear-ptr! new-pair)
+                 front-ptr))))
+      (define (delete-queue!)
+        (cond ((empty-queue?)
+               (error "DELETE! called with an empty queue"))
+              (else
+               (set-front-ptr! (cdr front-ptr)))))
+      (define (print-queue)
+        (display front-ptr)
+        (newline))
+      (define (dispatch op . args)
+        (cond ((eq? op 'empty-queue?) (empty-queue?))
+              ((eq? op 'front-queue) (front-queue))
+              ((eq? op 'insert-queue!) (apply insert-queue! args))
+              ((eq? op 'delete-queue!) (delete-queue!))
+              ((eq? op 'print-queue) (print-queue))
+              (else
+               (error "UNKNOWN operation - MAKE-QUEUE" op))))
+      dispatch))
+
+  (define q (make-queue))
+  (q 'print-queue)
+  (q 'insert-queue! 'a)
+  (q 'print-queue)
+  (q 'insert-queue! 'b)
+  (q 'insert-queue! 'c)
+  (q 'print-queue)
+  (display (q 'front-queue))
+  (newline)
+  (q 'delete-queue!)
+  (q 'print-queue)
+  (display (q 'front-queue))
+  (newline)
+#+END_SRC
+
+#+RESULTS:
+: "()\n(a)\n(a b c)\na\n(b c)\nb\n"
+
