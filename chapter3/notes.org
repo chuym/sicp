@@ -636,3 +636,110 @@ operations using this representation.
 #+RESULTS:
 : "()\n(a)\n(a b c)\na\n(b c)\nb\n"
 
+* Excercise 3.23
+A deque (``double-ended queue'') is a sequence in which items can be inserted and
+deleted at either the front or the rear. Operations on deques are the constructor
+ make-deque, the predicate empty-deque?, selectors front-deque and rear-deque, 
+and mutators front-insert-deque!, rear-insert-deque!, front-delete-deque!, and 
+rear-delete-deque!. Show how to represent deques using pairs, and give 
+implementations of the operations. All operations should be accomplished in O(1) 
+steps.
+
+To simplify, will use the dispatch form queue implementation of the previous
+excercise.
+
+#+BEGIN_SRC scheme :results output
+  (define (make-deque)
+    (let ((front-ptr '())
+          (rear-ptr '())
+          (prev-rear-ptr '()))
+      (define (set-front-ptr! v)
+        (set! front-ptr v))
+
+      (define (set-rear-ptr! v)
+        (set! rear-ptr v))
+
+      (define (empty-deque?)
+        (null? front-ptr))
+      (define (front-deque)
+        (if (empty-deque?)
+            (error "FRONT called with an empty deque")
+            (car front-ptr)))
+      (define (front-insert-deque! item)
+        (let ((new-pair (cons item '())))
+          (cond ((empty-deque?)
+                 (set-front-ptr! new-pair)
+                 (set-rear-ptr! new-pair)
+                 (cons front-ptr rear-ptr))
+                (else
+                 (set-cdr! rear-ptr new-pair)
+                 (set! prev-rear-ptr (cons rear-ptr prev-rear-ptr))
+                 (set-rear-ptr! new-pair)
+                 front-ptr))))
+
+      (define (front-delete-deque!)
+        (cond ((empty-deque?)
+               (error "DELETE! called with an empty deque"))
+              (else
+               (set-front-ptr! (cdr front-ptr)))))
+
+      (define (print-deque)
+        (display front-ptr)
+        (newline))
+
+      (define (rear-queue)
+        (if (empty-deque?)
+            (error "REAR called with an empty deque")
+            (car rear-ptr)))
+
+      (define (rear-insert-deque! item)
+        ;; this function will add an item at the beginning of the queue.
+        (let ((new-pair (cons item '())))
+          (cond ((empty-deque?)
+                 (set-front-ptr! new-pair)
+                 (set-rear-ptr! new-pair)
+                 (cons front-ptr rear-ptr))
+                (else
+                 (set-cdr! new-pair front-ptr)
+                 (set-front-ptr! new-pair)
+                 front-ptr))))
+
+      (define (rear-delete-deque!)
+        ;; this function will remove an item at the end of the queue.
+        (cond ((empty-deque?)
+               (error "REAR-DELETE! called with an empty deque"))
+              (else
+               (set-rear-ptr! (car prev-rear-ptr))
+               (set-cdr! rear-ptr '()))))
+
+      (define (dispatch op . args)
+        (cond ((eq? op 'empty-deque?) (empty-deque?))
+              ((eq? op 'front-deque) (front-deque))
+              ((eq? op 'rear-deque) (rear-deque))
+              ((eq? op 'front-insert-deque!) (apply front-insert-deque! args))
+              ((eq? op 'rear-insert-deque!) (apply rear-insert-deque! args))
+              ((eq? op 'front-delete-deque!) (front-delete-deque!))
+              ((eq? op 'rear-delete-deque!) (rear-delete-deque!))
+              ((eq? op 'print-deque) (print-deque))
+              (else
+               (error "UNKNOWN operation - MAKE-DEQUE" op))))
+      dispatch))
+
+  (define q (make-deque))
+  (q 'print-deque)
+  (q 'insert-deque! 'a)
+  (q 'print-deque)
+  (q 'insert-deque! 'b)
+  (q 'insert-deque! 'c)
+  (q 'print-deque)
+  (display (q 'front-deque))
+  (newline)
+  (q 'delete-deque!)
+  (q 'print-deque)
+  (display (q 'front-deque))
+  (newline)
+#+END_SRC
+
+#+RESULTS:
+: "()\n(a)\n(a b c)\na\n(b c)\nb\n"
+
